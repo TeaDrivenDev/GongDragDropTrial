@@ -1,3 +1,3 @@
 source https://nuget.org/api/v2
 
-nuget gong-wpf-dragdrop
+nuget gong-wpf-dragdrop >= 1.0.0-ALPHA001
