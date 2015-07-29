@@ -4,7 +4,8 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:GongDragDropTrial"
         Title="MainWindow"
-        Width="470" Height="310">
+        Width="470"
+        Height="310">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -15,10 +16,11 @@
         </ResourceDictionary>
     </Window.Resources>
 
-    <StackPanel Orientation="Horizontal" Margin="5">
-        <ListBox ItemsSource="{Binding CityList}"
-                 DisplayMemberPath="Name">
-            <ListBox.ItemContainerStyle>
+    <StackPanel Orientation="Horizontal"
+                Margin="5">
+        <!--<ItemsControl ItemsSource="{Binding CityList}"
+                      DisplayMemberPath="Name">
+            <ItemsControl.ItemContainerStyle>
                 <Style TargetType="{x:Type ListBoxItem}">
                     <Setter Property="Canvas.Left"
                             Value="{Binding Longitude, Converter={StaticResource longValueConverter},
@@ -27,14 +29,90 @@
                             Value="{Binding Latitude, Converter={StaticResource latValueConverter},
                                             ConverterParameter={StaticResource mapHeight}}" />
                 </Style>
-            </ListBox.ItemContainerStyle>
-            <ListBox.ItemsPanel>
+            </ItemsControl.ItemContainerStyle>
+            <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas IsItemsHost="True"
                             Width="{StaticResource mapWidth}"
                             Height="{StaticResource mapHeight}" />
                 </ItemsPanelTemplate>
-            </ListBox.ItemsPanel>
-        </ListBox>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>-->
+
+        <ItemsControl ItemsSource="{Binding CityList}"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas IsItemsHost="True"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <ItemsControl.ItemContainerStyle>
+                <!--<Style TargetType="ContentPresenter">
+                    <Setter Property="Canvas.Left"
+                            Value="{Binding CalculatedNormalLeft}" />
+                    <Setter Property="Canvas.Top"
+                            Value="{Binding CalculatedNormalTop}" />
+                    <Setter Property="Width"
+                            Value="{Binding Width}" />
+                    <Setter Property="Height"
+                            Value="{Binding Height}" />
+                </Style>-->
+
+                <Style TargetType="{x:Type ContentPresenter}">
+                    <Setter Property="Canvas.Left"
+                            Value="{Binding Longitude, Converter={StaticResource longValueConverter},
+                                            ConverterParameter={StaticResource mapWidth}, Mode=TwoWay}" />
+                    <Setter Property="Canvas.Top"
+                            Value="{Binding Latitude, Converter={StaticResource latValueConverter},
+                                            ConverterParameter={StaticResource mapHeight}, Mode=TwoWay}" />
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid HorizontalAlignment="Stretch"
+                          VerticalAlignment="Stretch">
+
+                        <!--<controls:MoveThumb Cursor="SizeAll"
+                                            Template="{StaticResource MoveThumbTemplate}" />-->
+
+                        <Rectangle Fill="Blue"
+                                   Opacity="0.1"
+                                   IsHitTestVisible="False"
+                                   Stretch="Fill" />
+
+                        <TextBlock Foreground="#ffffffff"
+                                   FontSize="24"
+                                   FontWeight="Bold"
+                                   FontFamily="Segoe UI"
+                                   Text="{Binding Name}"
+                                   IsHitTestVisible="False"
+                                   Margin="10,0,10,0"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center">
+                            <TextBlock.Effect>
+                                <DropShadowEffect Opacity="1"
+                                                  BlurRadius="4"
+                                                  Color="Black"
+                                                  ShadowDepth="0" />
+                            </TextBlock.Effect>
+                        </TextBlock>
+
+                        <!--<controls:DesignerItemDecorator x:Name="ItemDecorator"
+                                                ShowDecorator="True" />-->
+
+                        <!--<Grid.RenderTransform>
+                            <RotateTransform CenterX="0.5"
+                                             CenterY="0.5"
+                                             Angle="{Binding RotationAngle}" />
+                        </Grid.RenderTransform>-->
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
     </StackPanel>
 </Window>
