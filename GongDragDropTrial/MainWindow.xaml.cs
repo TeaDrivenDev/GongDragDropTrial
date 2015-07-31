@@ -2,30 +2,34 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
+using System.Linq;
 using System.Windows;
 using System.Windows.Data;
+using GongSolutions.Wpf.DragDrop;
 
 namespace GongDragDropTrial
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, INotifyPropertyChanged
+    // http://wpf.2000things.com/2014/01/31/999-using-a-canvas-as-the-items-panel-for-a-listbox/
+    public partial class MainWindow : Window, INotifyPropertyChanged, IDropTarget
     {
         public MainWindow()
         {
             InitializeComponent();
             DataContext = this;
 
-            CityList = new ObservableCollection<City>
-            {
-                new City("Duluth", 46.83, 92.18),
-                new City("Redmond", 44.27, 121.15),
-                new City("Tucson", 32.12, 110.93),
-                new City("Denver", 39.75, 104.87),
-                new City("Boston", 42.37, 71.03),
-                new City("Tampa", 27.97, 82.53)
-            };
+            var random = new Random();
+
+            var maxLeft = this.Width - 100;
+            var maxTop = this.Height - 100;
+
+            CityList =
+                new ObservableCollection<City>(
+                    new[] { "Asdkjgk", "lksjdfkljsd", "klsjdfkljs" }.Select(
+                        name =>
+                            new City(name, random.Next((int)maxLeft), random.Next((int)maxTop))));
         }
 
         private ObservableCollection<City> cityList;
@@ -47,6 +51,16 @@ namespace GongDragDropTrial
         {
             PropertyChanged(this, new PropertyChangedEventArgs(propName));
         }
+
+        void IDropTarget.DragOver(IDropInfo dropInfo)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IDropTarget.Drop(IDropInfo dropInfo)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class City
@@ -63,46 +77,46 @@ namespace GongDragDropTrial
         }
     }
 
-    public static class Constants
-    {
-        public const double LatTop = 50.0;
-        public const double LatBottom = 24.0;
+    //public static class Constants
+    //{
+    //    public const double LatTop = 50.0;
+    //    public const double LatBottom = 24.0;
 
-        public const double LongLeft = 125.0;
-        public const double LongRight = 66.0;
-    }
+    //    public const double LongLeft = 125.0;
+    //    public const double LongRight = 66.0;
+    //}
 
-    public class LatValueConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            double latitude = (double)value;
-            double height = (double)parameter;
+    //public class LatValueConverter : IValueConverter
+    //{
+    //    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    //    {
+    //        double latitude = (double)value;
+    //        double height = (double)parameter;
 
-            int top = (int)((Constants.LatTop - latitude) / (Constants.LatTop - Constants.LatBottom) * height);
-            return top;
-        }
+    //        int top = (int)((Constants.LatTop - latitude) / (Constants.LatTop - Constants.LatBottom) * height);
+    //        return top;
+    //    }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
+    //    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+    //}
 
-    public class LongValueConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            double longitude = (double)value;
-            double width = (double)parameter;
+    //public class LongValueConverter : IValueConverter
+    //{
+    //    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    //    {
+    //        double longitude = (double)value;
+    //        double width = (double)parameter;
 
-            int left = (int)((Constants.LongLeft - longitude) / (Constants.LongLeft - Constants.LongRight) * width);
-            return left;
-        }
+    //        int left = (int)((Constants.LongLeft - longitude) / (Constants.LongLeft - Constants.LongRight) * width);
+    //        return left;
+    //    }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
+    //    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+    //}
 }

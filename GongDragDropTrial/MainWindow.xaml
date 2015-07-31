@@ -3,16 +3,35 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:GongDragDropTrial"
+        xmlns:dragDrop="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
         Title="MainWindow"
-        Width="470"
-        Height="310">
+        Width="1000"
+        Height="1000"
+        Background="Gray">
 
     <Window.Resources>
         <ResourceDictionary>
-            <local:LatValueConverter x:Key="latValueConverter" />
-            <local:LongValueConverter x:Key="longValueConverter" />
-            <sys:Double x:Key="mapWidth">440</sys:Double>
-            <sys:Double x:Key="mapHeight">240</sys:Double>
+
+            <sys:Double x:Key="mapWidth">1000</sys:Double>
+            <sys:Double x:Key="mapHeight">1000</sys:Double>
+
+            <DataTemplate x:Key="DragAdorner">
+                <Border Background="Silver"
+                        BorderBrush="Gray"
+                        BorderThickness="1"
+                        CornerRadius="2"
+                        Margin="1">
+                    <StackPanel Orientation="Horizontal">
+                        <!--<Image Source="/icon.png"
+                               Width="16"
+                               Margin="0,0,2,0"
+                               VerticalAlignment="Center" />-->
+                        <TextBlock Text="AAAAAAAAAAAAAAAAAAHHHHHHHHHH"
+                                   Margin="0,0,2,0"
+                                   VerticalAlignment="Center" />
+                    </StackPanel>
+                </Border>
+            </DataTemplate>
         </ResourceDictionary>
     </Window.Resources>
 
@@ -39,6 +58,7 @@
             </ItemsControl.ItemsPanel>
         </ItemsControl>-->
 
+        <!-- http://10rem.net/blog/2010/09/16/custom-placement-within-an-itemscontrol-in-wpf -->
         <ItemsControl ItemsSource="{Binding CityList}"
                       HorizontalAlignment="Stretch"
                       VerticalAlignment="Stretch">
@@ -46,7 +66,13 @@
                 <ItemsPanelTemplate>
                     <Canvas IsItemsHost="True"
                             HorizontalAlignment="Stretch"
-                            VerticalAlignment="Stretch" />
+                            VerticalAlignment="Stretch"
+                            dragDrop:DragDrop.IsDragSource="True"
+                            dragDrop:DragDrop.IsDropTarget="True"
+                            dragDrop:DragDrop.DragAdornerTemplate="{StaticResource DragAdorner}"
+                            dragDrop:DragDrop.DragHandler="{Binding}"
+                            Background="Black"
+                            IsHitTestVisible="True" />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
 
@@ -64,43 +90,33 @@
 
                 <Style TargetType="{x:Type ContentPresenter}">
                     <Setter Property="Canvas.Left"
-                            Value="{Binding Longitude, Converter={StaticResource longValueConverter},
-                                            ConverterParameter={StaticResource mapWidth}, Mode=TwoWay}" />
+                            Value="{Binding Longitude, Mode=TwoWay}" />
                     <Setter Property="Canvas.Top"
-                            Value="{Binding Latitude, Converter={StaticResource latValueConverter},
-                                            ConverterParameter={StaticResource mapHeight}, Mode=TwoWay}" />
+                            Value="{Binding Latitude, Mode=TwoWay}" />
                 </Style>
             </ItemsControl.ItemContainerStyle>
 
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Grid HorizontalAlignment="Stretch"
-                          VerticalAlignment="Stretch">
+                    <Grid>
 
                         <!--<controls:MoveThumb Cursor="SizeAll"
                                             Template="{StaticResource MoveThumbTemplate}" />-->
-
-                        <Rectangle Fill="Blue"
+                        <Ellipse Width="100"
+                                 Height="100"
+                                 Fill="Transparent"
+                                 Stroke="AliceBlue"
+                                 StrokeThickness="2" />
+                        <!--<Rectangle Fill="Blue"
                                    Opacity="0.1"
                                    IsHitTestVisible="False"
-                                   Stretch="Fill" />
+                                   Stretch="Fill" />-->
 
-                        <TextBlock Foreground="#ffffffff"
-                                   FontSize="24"
-                                   FontWeight="Bold"
-                                   FontFamily="Segoe UI"
+                        <TextBlock Foreground="White"
+                                   FontSize="12"
                                    Text="{Binding Name}"
-                                   IsHitTestVisible="False"
-                                   Margin="10,0,10,0"
                                    HorizontalAlignment="Center"
-                                   VerticalAlignment="Center">
-                            <TextBlock.Effect>
-                                <DropShadowEffect Opacity="1"
-                                                  BlurRadius="4"
-                                                  Color="Black"
-                                                  ShadowDepth="0" />
-                            </TextBlock.Effect>
-                        </TextBlock>
+                                   VerticalAlignment="Center" />
 
                         <!--<controls:DesignerItemDecorator x:Name="ItemDecorator"
                                                 ShowDecorator="True" />-->
