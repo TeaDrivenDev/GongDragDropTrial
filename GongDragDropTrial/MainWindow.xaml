@@ -1,8 +1,6 @@
 ﻿<Window x:Class="GongDragDropTrial.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:sys="clr-namespace:System;assembly=mscorlib"
-        xmlns:local="clr-namespace:GongDragDropTrial"
         xmlns:dragDrop="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
         Title="MainWindow"
         Width="1000"
@@ -11,9 +9,6 @@
 
     <Window.Resources>
         <ResourceDictionary>
-
-            <sys:Double x:Key="mapWidth">1000</sys:Double>
-            <sys:Double x:Key="mapHeight">1000</sys:Double>
 
             <DataTemplate x:Key="DragAdorner">
                 <Border Background="Silver"
@@ -37,71 +32,36 @@
 
     <StackPanel Orientation="Horizontal"
                 Margin="5">
-        <!--<ItemsControl ItemsSource="{Binding CityList}"
-                      DisplayMemberPath="Name">
-            <ItemsControl.ItemContainerStyle>
-                <Style TargetType="{x:Type ListBoxItem}">
-                    <Setter Property="Canvas.Left"
-                            Value="{Binding Longitude, Converter={StaticResource longValueConverter},
-                                            ConverterParameter={StaticResource mapWidth}}" />
-                    <Setter Property="Canvas.Top"
-                            Value="{Binding Latitude, Converter={StaticResource latValueConverter},
-                                            ConverterParameter={StaticResource mapHeight}}" />
-                </Style>
-            </ItemsControl.ItemContainerStyle>
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <Canvas IsItemsHost="True"
-                            Width="{StaticResource mapWidth}"
-                            Height="{StaticResource mapHeight}" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-        </ItemsControl>-->
 
         <!-- http://10rem.net/blog/2010/09/16/custom-placement-within-an-itemscontrol-in-wpf -->
-        <ItemsControl ItemsSource="{Binding CityList}"
-                      HorizontalAlignment="Stretch"
+        <ItemsControl ItemsSource="{Binding MainItems}"
                       VerticalAlignment="Stretch">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas IsItemsHost="True"
-                            HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch"
                             dragDrop:DragDrop.IsDragSource="True"
                             dragDrop:DragDrop.IsDropTarget="True"
                             dragDrop:DragDrop.DragAdornerTemplate="{StaticResource DragAdorner}"
                             dragDrop:DragDrop.DragHandler="{Binding}"
+                            dragDrop:DragDrop.DropHandler="{Binding}"
                             Background="Black"
                             IsHitTestVisible="True" />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
 
             <ItemsControl.ItemContainerStyle>
-                <!--<Style TargetType="ContentPresenter">
-                    <Setter Property="Canvas.Left"
-                            Value="{Binding CalculatedNormalLeft}" />
-                    <Setter Property="Canvas.Top"
-                            Value="{Binding CalculatedNormalTop}" />
-                    <Setter Property="Width"
-                            Value="{Binding Width}" />
-                    <Setter Property="Height"
-                            Value="{Binding Height}" />
-                </Style>-->
-
                 <Style TargetType="{x:Type ContentPresenter}">
                     <Setter Property="Canvas.Left"
-                            Value="{Binding Longitude, Mode=TwoWay}" />
+                            Value="{Binding Left, Mode=TwoWay}" />
                     <Setter Property="Canvas.Top"
-                            Value="{Binding Latitude, Mode=TwoWay}" />
+                            Value="{Binding Top, Mode=TwoWay}" />
                 </Style>
             </ItemsControl.ItemContainerStyle>
 
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Grid>
-
-                        <!--<controls:MoveThumb Cursor="SizeAll"
-                                            Template="{StaticResource MoveThumbTemplate}" />-->
                         <Ellipse Width="100"
                                  Height="100"
                                  Fill="Transparent"
@@ -130,5 +90,11 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
+        <ListBox ItemsSource="{Binding Source}"
+                 DisplayMemberPath="Name"
+                 Width="150"
+                 dragDrop:DragDrop.IsDragSource="True"
+                 dragDrop:DragDrop.DragAdornerTemplate="{StaticResource DragAdorner}">
+        </ListBox>
     </StackPanel>
 </Window>

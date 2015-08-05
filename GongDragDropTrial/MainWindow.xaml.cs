@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Globalization;
 using System.Linq;
-using System.Windows;
-using System.Windows.Data;
 using GongSolutions.Wpf.DragDrop;
 
 namespace GongDragDropTrial
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     // http://wpf.2000things.com/2014/01/31/999-using-a-canvas-as-the-items-panel-for-a-listbox/
-    public partial class MainWindow : Window, INotifyPropertyChanged, IDropTarget
+    public partial class MainWindow : INotifyPropertyChanged, IDropTarget
     {
         public MainWindow()
         {
@@ -25,22 +19,50 @@ namespace GongDragDropTrial
             var maxLeft = this.Width - 100;
             var maxTop = this.Height - 100;
 
-            CityList =
-                new ObservableCollection<City>(
-                    new[] { "Asdkjgk", "lksjdfkljsd", "klsjdfkljs" }.Select(
+            MainItems =
+                new ObservableCollection<Thing>(
+                    new[] { "Regulus", "Dubhe", "Denebola", "Gienah", "Acrux" }
+                    .Select(
                         name =>
-                            new City(name, random.Next((int)maxLeft), random.Next((int)maxTop))));
+                            new Thing(name, random.Next((int)maxLeft), random.Next((int)maxTop))));
+
+            Source = new ObservableCollection<Thing>(
+                new[]
+                {
+                    "Rigel",
+                    "Zubenelgenubi",
+                    "Kochab",
+                    "Alpheca",
+                    "Antares",
+                    "Atria",
+                    "Sabic",
+                    "Shaula",
+                    "Rasalhague",
+                    "Eltanin"
+                }.Select(name => new Thing(name, 0, 0)));
+            ;
         }
 
-        private ObservableCollection<City> cityList;
+        private ObservableCollection<Thing> mainItems;
+        private ObservableCollection<Thing> source;
 
-        public ObservableCollection<City> CityList
+        public ObservableCollection<Thing> MainItems
         {
-            get { return cityList; }
+            get { return mainItems; }
             set
             {
-                cityList = value;
-                RaisePropertyChanged("CityList");
+                mainItems = value;
+                RaisePropertyChanged("MainItems");
+            }
+        }
+
+        public ObservableCollection<Thing> Source
+        {
+            get { return source; }
+            set
+            {
+                source = value;
+                RaisePropertyChanged("Source");
             }
         }
 
@@ -54,7 +76,7 @@ namespace GongDragDropTrial
 
         void IDropTarget.DragOver(IDropInfo dropInfo)
         {
-            throw new NotImplementedException();
+            this.Title = DateTime.Now.ToLongTimeString();
         }
 
         void IDropTarget.Drop(IDropInfo dropInfo)
@@ -63,60 +85,17 @@ namespace GongDragDropTrial
         }
     }
 
-    public class City
+    public class Thing
     {
         public string Name { get; private set; }
-        public double Longitude { get; set; }
-        public double Latitude { get; set; }
+        public double Left { get; set; }
+        public double Top { get; set; }
 
-        public City(string name, double latitude, double longitude)
+        public Thing(string name, double top, double left)
         {
             Name = name;
-            Longitude = longitude;
-            Latitude = latitude;
+            Left = left;
+            Top = top;
         }
     }
-
-    //public static class Constants
-    //{
-    //    public const double LatTop = 50.0;
-    //    public const double LatBottom = 24.0;
-
-    //    public const double LongLeft = 125.0;
-    //    public const double LongRight = 66.0;
-    //}
-
-    //public class LatValueConverter : IValueConverter
-    //{
-    //    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-    //    {
-    //        double latitude = (double)value;
-    //        double height = (double)parameter;
-
-    //        int top = (int)((Constants.LatTop - latitude) / (Constants.LatTop - Constants.LatBottom) * height);
-    //        return top;
-    //    }
-
-    //    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    //    {
-    //        throw new NotImplementedException();
-    //    }
-    //}
-
-    //public class LongValueConverter : IValueConverter
-    //{
-    //    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-    //    {
-    //        double longitude = (double)value;
-    //        double width = (double)parameter;
-
-    //        int left = (int)((Constants.LongLeft - longitude) / (Constants.LongLeft - Constants.LongRight) * width);
-    //        return left;
-    //    }
-
-    //    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    //    {
-    //        throw new NotImplementedException();
-    //    }
-    //}
 }
