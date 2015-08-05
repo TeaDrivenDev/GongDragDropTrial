@@ -40,7 +40,6 @@ namespace GongDragDropTrial
                     "Rasalhague",
                     "Eltanin"
                 }.Select(name => new Thing(name, 0, 0)));
-            ;
         }
 
         private ObservableCollection<Thing> mainItems;

@@ -6,7 +6,6 @@
         Width="1000"
         Height="1000"
         Background="Gray">
-
     <Window.Resources>
         <ResourceDictionary>
 
@@ -67,25 +66,11 @@
                                  Fill="Transparent"
                                  Stroke="AliceBlue"
                                  StrokeThickness="2" />
-                        <!--<Rectangle Fill="Blue"
-                                   Opacity="0.1"
-                                   IsHitTestVisible="False"
-                                   Stretch="Fill" />-->
-
                         <TextBlock Foreground="White"
                                    FontSize="12"
                                    Text="{Binding Name}"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center" />
-
-                        <!--<controls:DesignerItemDecorator x:Name="ItemDecorator"
-                                                ShowDecorator="True" />-->
-
-                        <!--<Grid.RenderTransform>
-                            <RotateTransform CenterX="0.5"
-                                             CenterY="0.5"
-                                             Angle="{Binding RotationAngle}" />
-                        </Grid.RenderTransform>-->
                     </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
